@@ -23,13 +23,11 @@ Works on **macOS** and **Linux** with automatic OS-specific configuration.
 | `.config/dircolors/nord.dircolors` | Nord theme colors for ls/tree |
 | `.config/cursor/profiles/` | Cursor importable profiles (includes extensions) |
 
-### 🚀 Auto-Bootstrap
+### 📦 After Setup
 
-On first run, chezmoi automatically:
-- Installs Homebrew (macOS) or apt packages (Linux)
-- Installs CLI tools: `eza`, `bat`, `fzf`, `zoxide`, `fd`, `ripgrep`
-- Clones zsh plugins (autosuggestions, syntax-highlighting)
-- Creates SSH directories with correct permissions
+After applying, you should manually install:
+- **CLI tools**: `eza`, `bat`, `fzf`, `zoxide`, `fd`, `ripgrep` (see [Recommended Tools](#recommended-cli-tools))
+- **Zsh plugins**: autosuggestions, syntax-highlighting (see [Zsh Plugins](#zsh-plugins-optional))
 
 ---
 
@@ -73,11 +71,11 @@ chezmoi diff          # See what will change (press q to exit)
 chezmoi apply -v      # Apply with verbose output
 ```
 
-This will automatically:
-- Install Homebrew (macOS) or apt packages (Linux)
-- Install CLI tools: eza, bat, fzf, zoxide, fd, ripgrep
-- Clone zsh plugins (autosuggestions, syntax-highlighting)
-- Create all dotfiles
+This will:
+- Create all dotfiles (`.zshrc`, `.bashrc`, `.gitconfig`, etc.)
+- Create `~/.config/shell/local.sh` template for your secrets
+
+Then manually install CLI tools (see [Recommended Tools](#recommended-cli-tools)).
 
 ### 5. Reload Shell
 
@@ -117,14 +115,33 @@ chezmoi apply -v
 
 These tools enhance your shell experience. The aliases/config auto-detect if they're installed:
 
-| Tool | Purpose | macOS | Linux |
-|------|---------|-------|-------|
-| [eza](https://github.com/eza-community/eza) | Modern `ls` replacement | `brew install eza` | `cargo install eza` or [deb](https://github.com/eza-community/eza/releases) |
-| [bat](https://github.com/sharkdp/bat) | Better `cat` with syntax highlighting | `brew install bat` | `sudo apt install bat` |
-| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder | `brew install fzf` | `sudo apt install fzf` |
-| [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` | `brew install zoxide` | `cargo install zoxide` |
-| [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep | `brew install ripgrep` | `sudo apt install ripgrep` |
-| [fd](https://github.com/sharkdp/fd) | Fast find | `brew install fd` | `sudo apt install fd-find` |
+| Tool | Purpose | macOS | Linux (no sudo) |
+|------|---------|-------|-----------------|
+| [eza](https://github.com/eza-community/eza) | Modern `ls` | `brew install eza` | `cargo install eza` |
+| [bat](https://github.com/sharkdp/bat) | Better `cat` | `brew install bat` | [Binary releases](https://github.com/sharkdp/bat/releases) |
+| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder | `brew install fzf` | `git clone` (see below) |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` | `brew install zoxide` | `curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh \| bash` |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep | `brew install ripgrep` | [Binary releases](https://github.com/BurntSushi/ripgrep/releases) |
+| [fd](https://github.com/sharkdp/fd) | Fast find | `brew install fd` | [Binary releases](https://github.com/sharkdp/fd/releases) |
+
+#### Linux Binary Install (no sudo required)
+
+```bash
+# Create local bin directory
+mkdir -p ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+
+# fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --bin
+ln -s ~/.fzf/bin/fzf ~/.local/bin/fzf
+
+# For bat, fd, ripgrep: download from GitHub releases, extract, move to ~/.local/bin
+# Example for bat:
+# curl -LO https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-musl.tar.gz
+# tar xzf bat-*.tar.gz
+# mv bat-*/bat ~/.local/bin/
+```
 
 ### Zsh Plugins (optional)
 
