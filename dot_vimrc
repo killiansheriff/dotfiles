@@ -4,6 +4,23 @@
 " ╚══════════════════════════════════════════════════════════════════════════╝
 
 " ─────────────────────────────────────────────────────────────────────────────
+" Plugin Manager (vim-plug)
+" ─────────────────────────────────────────────────────────────────────────────
+" Auto-install vim-plug if not present
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+" Monokai Pro colorscheme
+Plug 'phanviet/vim-monokai-pro'
+
+call plug#end()
+
+" ─────────────────────────────────────────────────────────────────────────────
 " General Settings
 " ─────────────────────────────────────────────────────────────────────────────
 set nocompatible              " Disable vi compatibility
@@ -36,6 +53,7 @@ set linebreak                 " Wrap at word boundaries
 " Colors
 set termguicolors             " True color support
 set background=dark
+silent! colorscheme monokai_pro  " Monokai Pro theme (silent if not yet installed)
 
 " ─────────────────────────────────────────────────────────────────────────────
 " Tabs & Indentation
