@@ -47,9 +47,6 @@ brew install chezmoi
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin
 ```
 
-**Linux (Arch):**
-```bash
-sudo pacman -S chezmoi
 ```
 
 ### 2. Clone & Initialize
@@ -85,7 +82,7 @@ This will automatically:
 ### 5. Reload Shell
 
 ```bash
-source ~/.zshrc
+reload    # Works for both zsh and bash
 # Or just open a new terminal
 ```
 
