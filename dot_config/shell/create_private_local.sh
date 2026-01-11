@@ -6,15 +6,21 @@
 # Edit freely at: ~/.config/shell/local.sh
 
 # ─────────────────────────────────────────────────────────────────────────────
-# SSH Connections (add your aliases here)
+# SSH Connections
 # ─────────────────────────────────────────────────────────────────────────────
 # alias cexp="ssh user@login.expanse.sdsc.edu"
 # alias csup="ssh user@txe1-login.mit.edu"
+# alias cwslurm="ssh $USER@server.example.com"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Machine-specific settings
+# API Keys (private)
 # ─────────────────────────────────────────────────────────────────────────────
-# - Work-specific aliases
-# - Custom PATH additions
-# - Environment variables
-# - API tokens (prefer a secrets manager!)
+# export COREWEAVE_ACCESS_KEY_ID="your_key"
+# export COREWEAVE_SECRET_ACCESS_KEY="your_secret"
+# export NEPTUNE_API_TOKEN="your_token"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Custom Aliases & Settings
+# ─────────────────────────────────────────────────────────────────────────────
+# alias pj='uv run pj'
+# export CUSTOM_VAR="value"

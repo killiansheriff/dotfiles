@@ -188,15 +188,43 @@ chezmoi update -v
 
 ---
 
-## 🔧 Machine-Specific Configuration
+## 🔧 Machine-Specific Configuration (Secrets & Private Aliases)
 
-For settings that shouldn't be version controlled (API keys, work aliases, etc.), edit:
+For settings that shouldn't be version controlled (API keys, SSH aliases, work shortcuts), use:
 
 ```bash
 ~/.config/shell/local.sh
 ```
 
-This file is sourced by both `.zshrc` and `.bashrc` but is marked as private and won't be committed.
+### How It Works
+
+1. **On first `chezmoi apply`**: A starter template is created at `~/.config/shell/local.sh`
+2. **You edit it manually**: Add your real secrets, SSH aliases, etc.
+3. **Chezmoi never overwrites it**: The `create_` prefix ensures your edits are preserved
+
+### Example `local.sh`
+
+```bash
+# SSH Connections
+alias cexp="ssh user@login.expanse.sdsc.edu"
+alias myserver="ssh user@server.example.com"
+
+# API Keys (private)
+export MY_API_KEY="your_secret_key"
+export ANOTHER_TOKEN="your_token"
+
+# Custom Aliases
+alias pj='uv run pj'
+```
+
+### Why Not Store Secrets in Git?
+
+Secrets should **never** be committed to git, even in a private repo. On each new machine:
+1. Run `chezmoi apply` → creates the template
+2. Edit `~/.config/shell/local.sh` → add your secrets
+3. Your secrets stay local to that machine
+
+> **Tip**: For synced secrets across machines, consider [1Password CLI](https://developer.1password.com/docs/cli/) or similar.
 
 ---
 
@@ -211,7 +239,7 @@ This file is sourced by both `.zshrc` and `.bashrc` but is marked as private and
 │   │   ├── aliases.sh.tmpl     # All aliases
 │   │   ├── exports.sh.tmpl     # Environment variables
 │   │   ├── functions.sh        # Shell functions
-│   │   └── private_local.sh.tmpl
+│   │   └── create_private_local.sh  # Template (created once, never overwritten)
 │   └── cursor/
 │       ├── profiles/           # Importable .code-profile files
 │       │   └── default.code-profile
@@ -229,6 +257,7 @@ This file is sourced by both `.zshrc` and `.bashrc` but is marked as private and
 | `dot_` | File starts with `.` (e.g., `dot_zshrc` → `.zshrc`) |
 | `.tmpl` | Template file (uses Go templating) |
 | `private_` | Private file (600 permissions) |
+| `create_` | Create file once, never overwrite (for secrets/local config) |
 | `empty_` | Ensure file exists but don't manage contents |
 
 ---
