@@ -1,0 +1,2 @@
+# SSH control socket directory
+# Used for connection multiplexing

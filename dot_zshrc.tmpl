@@ -1,0 +1,143 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║                               ZSH CONFIG                                  ║
+# ║                      Managed by chezmoi · {{ .chezmoi.os }}                          ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Zsh Options
+# ─────────────────────────────────────────────────────────────────────────────
+setopt AUTO_CD              # cd by typing directory name
+setopt AUTO_PUSHD           # Push dirs to stack automatically
+setopt PUSHD_IGNORE_DUPS    # No duplicate dirs in stack
+setopt PUSHD_SILENT         # Silent pushd
+setopt EXTENDED_GLOB        # Extended globbing
+setopt NO_CASE_GLOB         # Case insensitive globbing
+setopt NUMERIC_GLOB_SORT    # Sort numerically
+setopt SHARE_HISTORY        # Share history between sessions
+setopt HIST_IGNORE_ALL_DUPS # No duplicate history entries
+setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks
+setopt HIST_VERIFY          # Show command before executing from history
+setopt INTERACTIVE_COMMENTS # Allow comments in interactive shells
+setopt PROMPT_SUBST         # Enable prompt substitution
+
+# ─────────────────────────────────────────────────────────────────────────────
+# History
+# ─────────────────────────────────────────────────────────────────────────────
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE="$HOME/.zsh_history"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Prompt (simple and fast, or use starship below)
+# ─────────────────────────────────────────────────────────────────────────────
+# Colors
+autoload -U colors && colors
+
+# Git branch in prompt
+git_branch() {
+    local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+    [[ -n "$branch" ]] && echo " %F{magenta}($branch)%f"
+}
+
+# Simple prompt: user@host:path (branch) $
+PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$(git_branch) %F{white}$%f '
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Completions
+# ─────────────────────────────────────────────────────────────────────────────
+autoload -Uz compinit
+compinit -C
+
+# Case-insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Menu selection
+zstyle ':completion:*' menu select
+
+# Colorful completions
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Key Bindings
+# ─────────────────────────────────────────────────────────────────────────────
+bindkey -e                              # Emacs key bindings
+bindkey '^[[A' history-search-backward  # Up arrow: search history
+bindkey '^[[B' history-search-forward   # Down arrow: search history
+bindkey '^[[H' beginning-of-line        # Home
+bindkey '^[[F' end-of-line              # End
+bindkey '^[[3~' delete-char             # Delete
+bindkey '^[[1;5C' forward-word          # Ctrl+Right
+bindkey '^[[1;5D' backward-word         # Ctrl+Left
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Source modular configuration
+# ─────────────────────────────────────────────────────────────────────────────
+SHELL_CONFIG_DIR="$HOME/.config/shell"
+
+# Load in order: exports → aliases → functions
+[[ -f "$SHELL_CONFIG_DIR/exports.sh" ]]   && source "$SHELL_CONFIG_DIR/exports.sh"
+[[ -f "$SHELL_CONFIG_DIR/aliases.sh" ]]   && source "$SHELL_CONFIG_DIR/aliases.sh"
+[[ -f "$SHELL_CONFIG_DIR/functions.sh" ]] && source "$SHELL_CONFIG_DIR/functions.sh"
+
+# Machine-specific local config (not tracked by chezmoi)
+[[ -f "$SHELL_CONFIG_DIR/local.sh" ]] && source "$SHELL_CONFIG_DIR/local.sh"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Plugins (manual installation, no framework needed)
+# ─────────────────────────────────────────────────────────────────────────────
+# Autosuggestions: suggests commands as you type (gray text)
+# Install: git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+[[ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Syntax highlighting: colors commands as you type
+# Install: git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-syntax-highlighting
+[[ -f ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool Integrations
+# ─────────────────────────────────────────────────────────────────────────────
+# uv/rye Python environment
+[[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
+
+# fzf fuzzy finder
+{{ if eq .chezmoi.os "darwin" -}}
+[[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/fzf/shell/completion.zsh" ]] && \
+    source "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/fzf/shell/completion.zsh"
+[[ -f "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/fzf/shell/key-bindings.zsh" ]] && \
+    source "${HOMEBREW_PREFIX:-/opt/homebrew}/opt/fzf/shell/key-bindings.zsh"
+{{ else -}}
+[[ -f "/usr/share/fzf/completion.zsh" ]] && source "/usr/share/fzf/completion.zsh"
+[[ -f "/usr/share/fzf/key-bindings.zsh" ]] && source "/usr/share/fzf/key-bindings.zsh"
+{{ end -}}
+
+# zoxide (smarter cd) - replaces cd command if available
+# https://github.com/ajeetdsouza/zoxide
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh --cmd cd)"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Conda / Mamba (lazy loading for faster startup)
+# ─────────────────────────────────────────────────────────────────────────────
+# Initialize conda only when first called (speeds up shell startup)
+conda() {
+    unfunction conda 2>/dev/null
+    if [[ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]]; then
+        source "$HOME/miniforge3/etc/profile.d/conda.sh"
+    elif [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+        source "$HOME/miniconda3/etc/profile.d/conda.sh"
+    elif [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+        source "$HOME/anaconda3/etc/profile.d/conda.sh"
+    fi
+    conda "$@"
+}
+
+mamba() {
+    unfunction mamba 2>/dev/null
+    if [[ -f "$HOME/miniforge3/etc/profile.d/mamba.sh" ]]; then
+        source "$HOME/miniforge3/etc/profile.d/mamba.sh"
+    fi
+    mamba "$@"
+}

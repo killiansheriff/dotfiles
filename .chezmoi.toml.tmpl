@@ -1,0 +1,24 @@
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $github_username := promptStringOnce . "github_username" "GitHub username" -}}
+
+[data]
+    email = {{ $email | quote }}
+    name = {{ $name | quote }}
+    github_username = {{ $github_username | quote }}
+    
+    # Auto-detected values
+    {{- if eq .chezmoi.os "darwin" }}
+    os_family = "macos"
+    homebrew_prefix = "/opt/homebrew"
+    {{- else if eq .chezmoi.os "linux" }}
+    os_family = "linux"
+    homebrew_prefix = "/home/linuxbrew/.linuxbrew"
+    {{- end }}
+
+[edit]
+    command = "cursor"
+    args = ["--wait"]
+
+[diff]
+    pager = "delta"

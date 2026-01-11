@@ -1,0 +1,81 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║                              BASH CONFIG                                  ║
+# ║                      Managed by chezmoi · {{ .chezmoi.os }}                          ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Bash Options
+# ─────────────────────────────────────────────────────────────────────────────
+# These work on all bash versions
+shopt -s histappend       # Append to history file
+shopt -s checkwinsize     # Check window size after each command
+shopt -s nocaseglob       # Case-insensitive globbing
+shopt -s cdspell          # Autocorrect cd typos
+
+# These require bash 4.0+ (macOS ships with 3.2, use `brew install bash`)
+shopt -s globstar 2>/dev/null   # ** matches all files and directories
+shopt -s autocd 2>/dev/null     # cd by typing directory name
+
+# ─────────────────────────────────────────────────────────────────────────────
+# History
+# ─────────────────────────────────────────────────────────────────────────────
+HISTSIZE=50000
+HISTFILESIZE=50000
+HISTCONTROL=ignoreboth:erasedups
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Prompt
+# ─────────────────────────────────────────────────────────────────────────────
+# Simple colorful prompt
+PS1='\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Completions
+# ─────────────────────────────────────────────────────────────────────────────
+if [[ -f /etc/bash_completion ]]; then
+    source /etc/bash_completion
+elif [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    source /usr/share/bash-completion/bash_completion
+{{ if eq .chezmoi.os "darwin" -}}
+elif [[ -f "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
+    source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+{{ end -}}
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Source modular configuration
+# ─────────────────────────────────────────────────────────────────────────────
+SHELL_CONFIG_DIR="$HOME/.config/shell"
+
+# Load in order: exports → aliases → functions
+[[ -f "$SHELL_CONFIG_DIR/exports.sh" ]]   && source "$SHELL_CONFIG_DIR/exports.sh"
+[[ -f "$SHELL_CONFIG_DIR/aliases.sh" ]]   && source "$SHELL_CONFIG_DIR/aliases.sh"
+[[ -f "$SHELL_CONFIG_DIR/functions.sh" ]] && source "$SHELL_CONFIG_DIR/functions.sh"
+
+# Machine-specific local config (not tracked by chezmoi)
+[[ -f "$SHELL_CONFIG_DIR/local.sh" ]] && source "$SHELL_CONFIG_DIR/local.sh"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool Integrations
+# ─────────────────────────────────────────────────────────────────────────────
+# uv/rye Python environment
+[[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
+
+# fzf fuzzy finder
+{{ if eq .chezmoi.os "darwin" -}}
+[[ -f "$HOMEBREW_PREFIX/opt/fzf/shell/completion.bash" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.bash"
+[[ -f "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.bash" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.bash"
+{{ else -}}
+[[ -f "/usr/share/fzf/completion.bash" ]] && source "/usr/share/fzf/completion.bash"
+[[ -f "/usr/share/fzf/key-bindings.bash" ]] && source "/usr/share/fzf/key-bindings.bash"
+{{ end -}}
+
+# zoxide (smarter cd) - replaces cd command if available
+# https://github.com/ajeetdsouza/zoxide
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init bash --cmd cd)"
+fi
+

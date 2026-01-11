@@ -1,0 +1,23 @@
+# Ignore README and license files
+README.md
+LICENSE
+
+# Ignore scripts directory (used for setup, not dotfiles)
+scripts/
+
+# OS-specific ignores
+{{- if ne .chezmoi.os "darwin" }}
+# Linux: ignore macOS-specific files
+.Brewfile
+Library/
+{{- end }}
+
+{{- if ne .chezmoi.os "linux" }}
+# macOS: ignore Linux-specific files  
+.config/systemd/
+{{- end }}
+
+# Editor files
+*.swp
+*~
+.DS_Store

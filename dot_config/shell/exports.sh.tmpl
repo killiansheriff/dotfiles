@@ -1,0 +1,122 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║                          ENVIRONMENT EXPORTS                              ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+# Managed by chezmoi - edit source at ~/.local/share/chezmoi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# XDG Base Directory Specification
+# ─────────────────────────────────────────────────────────────────────────────
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Editor
+# ─────────────────────────────────────────────────────────────────────────────
+export EDITOR="nvim"
+export VISUAL="cursor"
+export PAGER="less"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Language & Locale
+# ─────────────────────────────────────────────────────────────────────────────
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Hostname (useful for HPC/remote sessions)
+# ─────────────────────────────────────────────────────────────────────────────
+export HOSTNAME="${HOSTNAME:-$(hostname)}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GitHub
+# ─────────────────────────────────────────────────────────────────────────────
+export GITHUB_USER="{{ .github_username }}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# History configuration
+# ─────────────────────────────────────────────────────────────────────────────
+export HISTSIZE=50000
+export SAVEHIST=50000
+export HISTFILE="$HOME/.zsh_history"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Less configuration
+# ─────────────────────────────────────────────────────────────────────────────
+export LESS="-R -F -X"
+export LESSHISTFILE=-
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Colors (Nord theme)
+# https://www.nordtheme.com/ports/dircolors
+# ─────────────────────────────────────────────────────────────────────────────
+if [[ -f "$HOME/.config/dircolors/nord.dircolors" ]]; then
+    if command -v dircolors &> /dev/null; then
+        eval "$(dircolors -b "$HOME/.config/dircolors/nord.dircolors")"
+    elif command -v gdircolors &> /dev/null; then
+        eval "$(gdircolors -b "$HOME/.config/dircolors/nord.dircolors")"
+    fi
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FZF (Nord theme)
+# ─────────────────────────────────────────────────────────────────────────────
+export FZF_DEFAULT_OPTS="
+  --color=fg:#e5e9f0,bg:#2e3440,hl:#81a1c1
+  --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
+  --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
+  --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b
+  --height=40% --layout=reverse --border --margin=1 --padding=1
+"
+# Use fd for faster file finding if available
+if command -v fd &> /dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Colored man pages (using bat if available)
+# ─────────────────────────────────────────────────────────────────────────────
+if command -v bat &> /dev/null; then
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export MANROFFOPT="-c"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PATH additions
+# ─────────────────────────────────────────────────────────────────────────────
+# Local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
+# Cargo/Rust
+[[ -d "$HOME/.cargo/bin" ]] && export PATH="$HOME/.cargo/bin:$PATH"
+
+# Go
+[[ -d "$HOME/go/bin" ]] && export PATH="$HOME/go/bin:$PATH"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OS-specific exports
+# ─────────────────────────────────────────────────────────────────────────────
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS: Homebrew
+export HOMEBREW_PREFIX="{{ .homebrew_prefix }}"
+export HOMEBREW_CELLAR="{{ .homebrew_prefix }}/Cellar"
+export HOMEBREW_REPOSITORY="{{ .homebrew_prefix }}"
+export PATH="{{ .homebrew_prefix }}/bin:{{ .homebrew_prefix }}/sbin:$PATH"
+export MANPATH="{{ .homebrew_prefix }}/share/man${MANPATH+:$MANPATH}:"
+export INFOPATH="{{ .homebrew_prefix }}/share/info:${INFOPATH:-}"
+
+# Silence macOS zsh warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+{{ else if eq .chezmoi.os "linux" -}}
+# Linux-specific exports
+# Homebrew on Linux (if installed)
+if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+    export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+    export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+fi
+
+{{ end -}}

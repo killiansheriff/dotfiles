@@ -1,0 +1,52 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║                              SSH CONFIG                                   ║
+# ║                         Managed by chezmoi                                ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Global defaults
+# ─────────────────────────────────────────────────────────────────────────────
+Host *
+    # Keep connections alive
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    
+    # Connection sharing (faster subsequent connections)
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h-%p
+    ControlPersist 600
+    
+    # Security
+    AddKeysToAgent yes
+    IdentitiesOnly yes
+{{ if eq .chezmoi.os "darwin" }}
+    # macOS: Use Keychain
+    UseKeychain yes
+{{ end }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HPC Clusters (add your hosts in ~/.ssh/config.d/hosts or below)
+# ─────────────────────────────────────────────────────────────────────────────
+# Example:
+# Host expanse
+#     HostName login.expanse.sdsc.edu
+#     User ksheriff
+#     IdentityFile ~/.ssh/id_ed25519
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GitHub / GitLab
+# ─────────────────────────────────────────────────────────────────────────────
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Include local configs (not tracked)
+# ─────────────────────────────────────────────────────────────────────────────
+Include ~/.ssh/config.d/*

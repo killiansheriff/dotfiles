@@ -1,0 +1,17 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║                              ZSH PROFILE                                  ║
+# ║           Login shell configuration · {{ .chezmoi.os }}                              ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+# This file runs for login shells (once at login/terminal open)
+
+{{ if eq .chezmoi.os "darwin" -}}
+# ─────────────────────────────────────────────────────────────────────────────
+# macOS: Homebrew PATH (must be set early)
+# ─────────────────────────────────────────────────────────────────────────────
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+{{ end -}}
+# ─────────────────────────────────────────────────────────────────────────────
+# Source .zshrc if it exists (for interactive login shells)
+# ─────────────────────────────────────────────────────────────────────────────
+[[ -f "$HOME/.zshrc" ]] && source "$HOME/.zshrc"
