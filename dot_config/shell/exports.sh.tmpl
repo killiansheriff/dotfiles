@@ -48,27 +48,19 @@ export LESS="-R -F -X"
 export LESSHISTFILE=-
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Colors (Nord theme)
-# https://www.nordtheme.com/ports/dircolors
+# bat (Monokai theme)
 # ─────────────────────────────────────────────────────────────────────────────
-if [[ -f "$HOME/.config/dircolors/nord.dircolors" ]]; then
-    if command -v dircolors &> /dev/null; then
-        eval "$(dircolors -b "$HOME/.config/dircolors/nord.dircolors")"
-    elif command -v gdircolors &> /dev/null; then
-        eval "$(gdircolors -b "$HOME/.config/dircolors/nord.dircolors")"
-    fi
-fi
+export BAT_THEME="Monokai Extended"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# FZF (Nord theme)
+# eza (uses terminal colors by default, icons require Nerd Font)
 # ─────────────────────────────────────────────────────────────────────────────
-export FZF_DEFAULT_OPTS="
-  --color=fg:#e5e9f0,bg:#2e3440,hl:#81a1c1
-  --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
-  --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
-  --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b
-  --height=40% --layout=reverse --border --margin=1 --padding=1
-"
+export EZA_ICONS_AUTO=1
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FZF
+# ─────────────────────────────────────────────────────────────────────────────
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --margin=1 --padding=1"
 # Use fd for faster file finding if available
 if command -v fd &> /dev/null; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
