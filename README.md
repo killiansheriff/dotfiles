@@ -27,7 +27,7 @@ Works on **macOS** and **Linux** with automatic OS-specific configuration.
 
 On first run, chezmoi automatically:
 - Installs Homebrew (macOS) or apt packages (Linux)
-- Installs CLI tools: `eza`, `bat`, `fzf`, `zoxide`, `fd`, `ripgrep`, `delta`
+- Installs CLI tools: `eza`, `bat`, `fzf`, `zoxide`, `fd`, `ripgrep`
 - Clones zsh plugins (autosuggestions, syntax-highlighting)
 - Creates SSH directories with correct permissions
 
@@ -75,7 +75,7 @@ chezmoi apply -v      # Apply with verbose output
 
 This will automatically:
 - Install Homebrew (macOS) or apt packages (Linux)
-- Install CLI tools: eza, bat, fzf, zoxide, fd, ripgrep, delta
+- Install CLI tools: eza, bat, fzf, zoxide, fd, ripgrep
 - Clone zsh plugins (autosuggestions, syntax-highlighting)
 - Create all dotfiles
 
@@ -123,7 +123,6 @@ These tools enhance your shell experience. The aliases/config auto-detect if the
 | [bat](https://github.com/sharkdp/bat) | Better `cat` with syntax highlighting | `brew install bat` | `sudo apt install bat` |
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder | `brew install fzf` | `sudo apt install fzf` |
 | [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` | `brew install zoxide` | `cargo install zoxide` |
-| [delta](https://github.com/dandavison/delta) | Better git diffs | `brew install git-delta` | `cargo install git-delta` |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep | `brew install ripgrep` | `sudo apt install ripgrep` |
 | [fd](https://github.com/sharkdp/fd) | Fast find | `brew install fd` | `sudo apt install fd-find` |
 

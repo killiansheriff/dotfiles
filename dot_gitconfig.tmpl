@@ -14,17 +14,7 @@
     editor = nvim
     excludesfile = ~/.gitignore_global
     autocrlf = input
-    # Use delta for better diffs (if installed)
-    pager = delta --dark 2>/dev/null || less
-
-[interactive]
-    diffFilter = delta --color-only 2>/dev/null || cat
-
-[delta]
-    navigate = true
-    line-numbers = true
-    side-by-side = false
-    syntax-theme = Nord
+    pager = less
 
 [merge]
     conflictstyle = diff3
