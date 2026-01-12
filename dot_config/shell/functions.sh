@@ -45,6 +45,18 @@ gclone() {
     git clone "$1" && cd "$(basename "$1" .git)"
 }
 
+# cd to git repository root
+groot() {
+    local root
+    root=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [[ -n "$root" ]]; then
+        cd "$root"
+    else
+        echo "Not in a git repository"
+        return 1
+    fi
+}
+
 # Interactive git add with fzf
 gadd() {
     if command -v fzf &> /dev/null; then
