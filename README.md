@@ -29,6 +29,16 @@ After applying, you should manually install:
 - **CLI tools**: `eza`, `bat`, `fzf`, `zoxide`, `fd`, `ripgrep` (see [Recommended Tools](#recommended-cli-tools))
 - **Zsh plugins**: autosuggestions, syntax-highlighting (see [Zsh Plugins](#zsh-plugins-optional))
 
+### ⌨️ Hyper Key (macOS)
+
+For app switching shortcuts, we use [Raycast Hyper Key](https://manual.raycast.com/hyperkey) with **Caps Lock** as the Hyper Key. This remaps Caps Lock to act as ⌃⌥⇧⌘ (Control + Option + Shift + Command) when held, enabling powerful single-key shortcuts for launching apps.
+
+| Shortcut | App |
+|----------|-----|
+| Hyper + 1 | Cursor |
+| Hyper + 2 | Chrome |
+| Hyper + 3 | iTerm2 |
+
 ---
 
 ## 🚀 Quick Start
