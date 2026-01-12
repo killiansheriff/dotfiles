@@ -68,6 +68,10 @@ bindkey '^[[F' end-of-line              # End
 bindkey '^[[3~' delete-char             # Delete
 bindkey '^[[1;5C' forward-word          # Ctrl+Right
 bindkey '^[[1;5D' backward-word         # Ctrl+Left
+bindkey '^[f' forward-word              # Alt+Right (Option+Right on macOS)
+bindkey '^[b' backward-word             # Alt+Left (Option+Left on macOS)
+bindkey '^[[1;3C' forward-word          # Alt+Right (alternate)
+bindkey '^[[1;3D' backward-word         # Alt+Left (alternate)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Source modular configuration

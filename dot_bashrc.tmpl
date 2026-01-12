@@ -46,6 +46,14 @@ elif [[ -f "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Key Bindings
+# ─────────────────────────────────────────────────────────────────────────────
+bind '"\ef": forward-word'              # Alt+Right (Option+Right on macOS)
+bind '"\eb": backward-word'             # Alt+Left (Option+Left on macOS)
+bind '"\e[1;3C": forward-word'          # Alt+Right (alternate)
+bind '"\e[1;3D": backward-word'         # Alt+Left (alternate)
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Source modular configuration
 # ─────────────────────────────────────────────────────────────────────────────
 SHELL_CONFIG_DIR="$HOME/.config/shell"
