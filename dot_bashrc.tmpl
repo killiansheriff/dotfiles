@@ -11,6 +11,8 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # These work on all bash versions
 shopt -s histappend       # Append to history file
+shopt -s cmdhist          # Save multi-line commands as one entry
+shopt -s lithist          # Preserve newlines in multi-line commands
 shopt -s checkwinsize     # Check window size after each command
 shopt -s nocaseglob       # Case-insensitive globbing
 shopt -s cdspell          # Autocorrect cd typos
@@ -48,8 +50,13 @@ fi
 # ─────────────────────────────────────────────────────────────────────────────
 # Key Bindings
 # ─────────────────────────────────────────────────────────────────────────────
-bind '"\e[A": history-search-backward'  # Up arrow: search history
-bind '"\e[B": history-search-forward'   # Down arrow: search history
+# Up/Down arrow: search history for commands starting with current input
+bind '"\e[A": history-search-backward'  # Up arrow (normal mode)
+bind '"\e[B": history-search-forward'   # Down arrow (normal mode)
+bind '"\eOA": history-search-backward'  # Up arrow (application mode)
+bind '"\eOB": history-search-forward'   # Down arrow (application mode)
+
+# Navigation
 bind '"\ef": forward-word'              # Alt+Right (Option+Right on macOS)
 bind '"\eb": backward-word'             # Alt+Left (Option+Left on macOS)
 bind '"\e[1;3C": forward-word'          # Alt+Right (alternate)
