@@ -133,6 +133,7 @@ These tools enhance your shell experience. The aliases/config auto-detect if the
 | [zoxide](https://github.com/ajeetdsouza/zoxide) | Smarter `cd` | `brew install zoxide` | `curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh \| bash` |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep | `brew install ripgrep` | [Binary releases](https://github.com/BurntSushi/ripgrep/releases) |
 | [fd](https://github.com/sharkdp/fd) | Fast find | `brew install fd` | [Binary releases](https://github.com/sharkdp/fd/releases) |
+| [tailspin](https://github.com/bensadeh/tailspin) | Log highlighter | `brew install tailspin` | `cargo install tailspin` |
 
 #### Linux Binary Install (no sudo required)
 
